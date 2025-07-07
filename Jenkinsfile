@@ -6,6 +6,10 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'DockerHubCred'
         GIT_REPO_URL = 'https://github.com/Rohans-7/MLOps-Project.git'
         BRANCH = 'main'
+
+        MONGO_URL = credentials('mongo-url-id')
+        AWS_ACCESS_KEY_ID = credentials('aws-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-id')
     }
 
     stages {
@@ -36,11 +40,15 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
-                    ansiblePlaybook(
-                        playbook: 'deploy.yml',
-                        inventory: 'inventory'
-                    )
+                    withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
+                        sh """
+                            ansible-playbook deploy.yml -i inventory \
+                            -e IMAGE_NAME=${IMAGE_NAME} \
+                            -e MONGO_URL=${MONGO_URL} \
+                            -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+                            -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                        """
+                    }
                 }
             }
         }
