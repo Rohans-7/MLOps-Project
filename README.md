@@ -131,5 +131,3 @@ Welcome to this MLOps project, designed to demonstrate a robust pipeline for man
 If you found this project helpful or have any questions, feel free to reach out!
 
 ---
-
-This README provides a structured walkthrough of the MLOps project, showcasing the end-to-end pipeline, local Jenkins-based CI/CD setup and robust data handling capabilities.
